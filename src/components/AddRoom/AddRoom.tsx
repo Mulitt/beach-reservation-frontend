@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './AddRoom.css'
 
-const AddRoom = ({ isAddOpen, addRoom, submitRoom, closeAddRoom }) => {
-    const [details, setDetails] = useState({
+const AddRoom = ({ isAddOpen, addRoom, submitRoom, closeAddRoom }: any) => {
+    const [details, setDetails] = useState<any>({
         type: 'deluxe',
         bed: 0,
         status: 'operational',
@@ -43,7 +43,7 @@ const AddRoom = ({ isAddOpen, addRoom, submitRoom, closeAddRoom }) => {
                                         id="type"
                                         value={details.type}
                                         onChange={(e) =>
-                                            setDetails((details) => ({
+                                            setDetails((details: any) => ({
                                                 ...details,
                                                 type: e.target.value,
                                             }))
@@ -62,7 +62,7 @@ const AddRoom = ({ isAddOpen, addRoom, submitRoom, closeAddRoom }) => {
                                         id="beds"
                                         value={details.bed}
                                         onChange={(e) =>
-                                            setDetails((details) => ({
+                                            setDetails((details: any) => ({
                                                 ...details,
                                                 bed: e.target.value,
                                             }))
@@ -79,7 +79,7 @@ const AddRoom = ({ isAddOpen, addRoom, submitRoom, closeAddRoom }) => {
                                         id="status"
                                         value={details.status}
                                         onChange={(e) =>
-                                            setDetails((details) => ({
+                                            setDetails((details: any) => ({
                                                 ...details,
                                                 status: e.target.value,
                                             }))
@@ -103,7 +103,7 @@ const AddRoom = ({ isAddOpen, addRoom, submitRoom, closeAddRoom }) => {
                                         id="price"
                                         value={details.rate}
                                         onChange={(e) =>
-                                            setDetails((details) => ({
+                                            setDetails((details: any) => ({
                                                 ...details,
                                                 rate: e.target.value,
                                             }))
@@ -123,7 +123,7 @@ const AddRoom = ({ isAddOpen, addRoom, submitRoom, closeAddRoom }) => {
                                         id="desc"
                                         value={details.shortDesc}
                                         onChange={(e) =>
-                                            setDetails((details) => ({
+                                            setDetails((details: any) => ({
                                                 ...details,
                                                 shortDesc: e.target.value,
                                             }))

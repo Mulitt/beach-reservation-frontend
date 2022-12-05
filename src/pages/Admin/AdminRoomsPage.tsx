@@ -17,15 +17,20 @@ const AdminRoomsPage = () => {
     const [displayAlert, setDisplayAlert] = useState(false)
 
     // TODO: dd functionality to send request to server to modify room
-    function modifyRoom(roomNumber) {
+    async function modifyRoom(roomNumber: any) {
         setIsEditOpen(true)
+        console.log(roomNumber)
+    }
+
+    async function submitEdit(roomNumber: number, details: any) {
+        console.log({ roomNumber, details })
     }
 
     function handleAddRoomModal() {
         setIsAddOpen((curr) => (curr = !curr))
     }
 
-    function closeModal(e) {
+    function closeModal(e: any) {
         if (e.target.classList.contains('btn-cancel')) {
             setIsAddOpen(false)
             setIsEditOpen(false)
@@ -36,11 +41,11 @@ const AdminRoomsPage = () => {
         setDisplayAlert(false)
     }
 
-    function filterRooms(filter) {
+    function filterRooms(filter: string) {
         setFilter(filter)
     }
 
-    async function submitRoom(details) {
+    async function submitRoom(details: any) {
         setSubmissionLoading(true)
 
         const response = await fetch(
@@ -95,7 +100,7 @@ const AdminRoomsPage = () => {
             .then((response) => response.json())
             .then((data) => {
                 setRooms([])
-                data.map((room) => setRooms((prev) => [...prev, room]))
+                data.map((room: any) => setRooms((prev) => [...prev, room]))
             })
         setIsLoading(false)
     }, [filter])
@@ -113,7 +118,11 @@ const AdminRoomsPage = () => {
                     submitRoom={submitRoom}
                     closeAddRoom={closeModal}
                 />
-                <EditRoom isVisible={isEditOpen} closeEdit={closeModal} />
+                <EditRoom
+                    isVisible={isEditOpen}
+                    closeEdit={closeModal}
+                    submitEdit={submitEdit}
+                />
                 <PostAlertAdmin
                     closeAlert={closeAlert}
                     status={isPostSuccess}

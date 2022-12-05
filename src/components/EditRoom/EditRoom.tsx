@@ -1,6 +1,14 @@
+import { useState } from 'react'
 import './EditRoom.css'
 
-const EditRoom = ({ isVisible, closeEdit }) => {
+const EditRoom = ({ isVisible, closeEdit, submitEdit }: any) => {
+    const [details, setDetails] = useState<any>({
+        type: 'deluxe',
+        bed: 0,
+        status: 'operational',
+        shortDesc: '',
+    })
+
     return (
         <div
             className={
@@ -20,7 +28,17 @@ const EditRoom = ({ isVisible, closeEdit }) => {
                             <div className="form-item">
                                 <label htmlFor="type">Type</label>
                                 <br />
-                                <select name="type" id="type">
+                                <select
+                                    name="type"
+                                    id="type"
+                                    value={details.type}
+                                    onChange={(e) =>
+                                        setDetails((prev: any) => ({
+                                            ...prev,
+                                            type: e.target.value,
+                                        }))
+                                    }
+                                >
                                     <option value="deluxe">Deluxe</option>
                                     <option value="suite">Suite</option>
                                 </select>
@@ -28,14 +46,35 @@ const EditRoom = ({ isVisible, closeEdit }) => {
                             <div className="form-item">
                                 <label htmlFor="beds">Beds</label>
                                 <br />
-                                <input type="number" name="beds" id="beds" />
+                                <input
+                                    type="number"
+                                    name="beds"
+                                    id="beds"
+                                    value={details.bed}
+                                    onChange={(e) =>
+                                        setDetails((prev: any) => ({
+                                            ...prev,
+                                            bed: e.target.value,
+                                        }))
+                                    }
+                                />
                             </div>
                         </div>
                         <div className="form-row">
                             <div className="form-item">
                                 <label htmlFor="status">Status</label>
                                 <br />
-                                <select name="status" id="status">
+                                <select
+                                    name="status"
+                                    id="status"
+                                    value={details.status}
+                                    onChange={(e) =>
+                                        setDetails((prev: any) => ({
+                                            ...prev,
+                                            status: e.target.value,
+                                        }))
+                                    }
+                                >
                                     <option value="operational">
                                         Operational
                                     </option>
@@ -53,6 +92,13 @@ const EditRoom = ({ isVisible, closeEdit }) => {
                                     name="desc"
                                     id="desc"
                                     className="desc"
+                                    value={details.shortDesc}
+                                    onChange={(e) =>
+                                        setDetails((prev: any) => ({
+                                            ...prev,
+                                            shortDesc: e.target.value,
+                                        }))
+                                    }
                                 ></textarea>
                             </div>
                         </div>
@@ -62,6 +108,7 @@ const EditRoom = ({ isVisible, closeEdit }) => {
                                     <button
                                         className="btn-submit"
                                         type="button"
+                                        onClick={() => submitEdit(details)}
                                     >
                                         Save
                                     </button>

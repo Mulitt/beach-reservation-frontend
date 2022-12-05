@@ -1,4 +1,4 @@
-import { Box, Flex } from '@mantine/core'
+import { Box, Flex, LoadingOverlay } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import Header from './Header'
 import { MonthlyGoal } from './MonthlyGoal'
@@ -19,18 +19,21 @@ type TData = {
 
 function DashboardLayout() {
     const [data, setData] = useState<TData>()
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         fetchReservations()
     }, [])
 
     function fetchReservations() {
+        setIsLoading(true)
         // fetch('http://localhost:5000/api/admin/stats')
         fetch('https://beach-reservation.onrender.com/api/admin/stats')
             .then((res) => res.json())
             .then((data) => {
                 setData(data)
                 console.log(data)
+                setIsLoading(false)
             })
     }
 
@@ -54,6 +57,10 @@ function DashboardLayout() {
     return (
         <div>
             <Flex gap="xl" mt="sm">
+                <LoadingOverlay
+                    visible={isLoading}
+                    loaderProps={{ variant: 'dots' }}
+                />
                 <Box style={{ flex: '1' }}>
                     <StatsGrid
                         data={[

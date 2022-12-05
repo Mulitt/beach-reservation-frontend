@@ -9,6 +9,7 @@ import {
     Container,
     Group,
     Button,
+    LoadingOverlay,
 } from '@mantine/core'
 import { useState } from 'react'
 import LoginAlert from './LoginAlert'
@@ -20,6 +21,7 @@ interface TPropFunction {
 
 export function AuthenticationTitle({ setAuth }: TPropFunction) {
     const [error, setError] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const form = useForm({
         initialValues: { email: '', password: '' },
 
@@ -34,6 +36,7 @@ export function AuthenticationTitle({ setAuth }: TPropFunction) {
     const navigate = useNavigate()
 
     const validateCredentials = async () => {
+        setIsSubmitting(true)
         const response = await fetch(
             // 'http://localhost:5000/api/admin/authenticate',
             'https://beach-reservation.onrender.com/api/admin/authenticate',
@@ -49,6 +52,7 @@ export function AuthenticationTitle({ setAuth }: TPropFunction) {
             }
         )
         const { result } = await response.json()
+        setIsSubmitting(false)
         if (!result) return setError(true)
         setAuth(result)
         navigate('/admin/dashboard')
@@ -56,6 +60,12 @@ export function AuthenticationTitle({ setAuth }: TPropFunction) {
 
     return (
         <Container size={420} my={40}>
+            <LoadingOverlay
+                visible={isSubmitting}
+                // overlayBlur={1}
+                overlayColor="lightgray"
+                loaderProps={{ variant: 'dots' }}
+            />
             <Title
                 align="center"
                 sx={(theme) => ({

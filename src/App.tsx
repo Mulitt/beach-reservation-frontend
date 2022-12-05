@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Loader from './components/Loader/Loader'
 import Homepage from './pages/Homepage'
@@ -79,7 +79,11 @@ const App = () => {
                         <Route path="cottage/:id" element={<ViewCottage />} />
                         <Route path="cottages" element={<CottagesPage />} />
                     </Route>
-                    <Route path="*" element={<NotFoundTitle />} />
+                    <Route path="/404" element={<NotFoundTitle />} />
+                    <Route
+                        path="*"
+                        element={<Navigate replace to={'/404'} />}
+                    />
                 </Routes>
             </Suspense>
         </div>

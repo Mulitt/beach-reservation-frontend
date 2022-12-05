@@ -37,7 +37,7 @@ export function MonthlyGoal({ income }: any) {
                 Monthly goal
             </Text>
             <Text size="lg" weight={500} className={classes.stats}>
-                ₱{income} / ₱100.000
+                ₱{income.toLocaleString()} / ₱100,000
             </Text>
             <Progress
                 value={income / 1000}

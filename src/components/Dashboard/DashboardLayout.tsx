@@ -43,6 +43,7 @@ function DashboardLayout() {
     }
 
     function computeProgress(whole: number, part: number) {
+        if (part < 1) return 0
         return whole / part
     }
 
@@ -59,7 +60,7 @@ function DashboardLayout() {
                             {
                                 title: 'Users',
                                 icon: 'user',
-                                value: data?.totalRooms.toString(),
+                                value: data?.users.toString(),
                                 diff: 0,
                             },
                             {

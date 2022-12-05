@@ -37,10 +37,10 @@ export function MonthlyGoal({ income }: any) {
                 Monthly goal
             </Text>
             <Text size="lg" weight={500} className={classes.stats}>
-                ₱{income} / ₱10.000
+                ₱{income} / ₱100.000
             </Text>
             <Progress
-                value={income / 100}
+                value={income / 1000}
                 mt="md"
                 size="lg"
                 radius="xl"

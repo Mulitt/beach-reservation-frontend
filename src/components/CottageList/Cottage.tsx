@@ -2,12 +2,15 @@ import UserButton from '../Room/UserButton'
 import '../Room/Room.css'
 import EditCottage from './EditCottage'
 import ReserveCottage from '../ViewCottage/ReserveCottage'
+import ReserveButton from '../ViewCottage/ReserveButton'
+import { Link } from 'react-router-dom'
 
 const Cottage = ({
     cottage,
     isAdmin,
+    dates,
     handleModification,
-    handleSubmit,
+    handleReserveCottage,
 }: any) => {
     return (
         <div className="room-card" style={{ marginBottom: '1em' }}>
@@ -28,10 +31,26 @@ const Cottage = ({
                             handleModification={handleModification}
                         />
                     ) : (
-                        <ReserveCottage
-                            cottage={cottage}
-                            handleSubmit={handleSubmit}
-                        />
+                        // <ReserveCottage
+                        //     cottage={cottage}
+                        //     handleSubmit={handleSubmit}
+                        // />
+                        <>
+                            <ReserveButton
+                                cottage={cottage}
+                                handleReserveCottage={handleReserveCottage}
+                                dates={dates}
+                            />
+                            <button className="btn-view-room">
+                                <Link
+                                    state={dates}
+                                    to={`/service/cottage/${cottage.cottageId}`}
+                                    className="view-room-link"
+                                >
+                                    View
+                                </Link>
+                            </button>
+                        </>
                     )}
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Roomcard from './Roomcard'
 import './ViewRoom.css'
 
@@ -7,6 +7,7 @@ const ViewRoom = () => {
     const [room, setRoom] = useState({})
     const { id } = useParams()
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         fetchRoom()
@@ -37,7 +38,7 @@ const ViewRoom = () => {
                     &larr;
                 </span>
             </nav>
-            <Roomcard room={room} />
+            <Roomcard room={room} dates={location.state} />
         </div>
     )
 }

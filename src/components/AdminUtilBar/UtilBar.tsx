@@ -1,14 +1,8 @@
 import AddRoom from '../AddRoom/AddRoom'
+import NewAddRoom from '../AddRoom/NewAddRoom'
 import './UtilBar.css'
 
-const UtilBar = ({
-    currentFilter,
-    setFilter,
-    isAddOpen,
-    handleAddRoomModal,
-    submitRoom,
-    closeAddRoom,
-}) => {
+const UtilBar = ({ currentFilter, setFilter, handleSubmit }: any) => {
     return (
         <div className="util-bar">
             <div className="status-selector">
@@ -27,12 +21,13 @@ const UtilBar = ({
                 </select>
             </div>
 
-            <AddRoom
+            {/* <AddRoom
                 isAddOpen={isAddOpen}
                 addRoom={handleAddRoomModal}
                 submitRoom={submitRoom}
                 closeAddRoom={closeAddRoom}
-            />
+            /> */}
+            <NewAddRoom handleSubmit={handleSubmit} />
         </div>
     )
 }

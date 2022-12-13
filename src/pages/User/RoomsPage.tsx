@@ -1,36 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import ContentHeader from '../../components/ContentHeader'
-import Modal from '../../components/Modal/Modal'
-import PostAlert from '../../components/PostAlert/PostAlert'
 import RoomFilter from '../../components/RoomFilter/RoomFilter'
 import RoomList from '../../components/RoomList/RoomList'
 import SubmissionLoader from '../../components/SubmissionLoader/SubmissionLoader'
 
 const RoomsPage = () => {
-    const [rooms, setRooms] = useState([])
-    const [modalOpen, setModalOpen] = useState(false)
-    const [openedRoom, setOpenedRoom] = useState(0)
-    const [isSubmitSuccess, setisSubmitSuccess] = useState(false)
-    const [displayAlert, setdisplayAlert] = useState(false)
+    const [rooms, setRooms] = useState<any[]>([])
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [displayAlert, setDisplayAlert] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const [dates, setDates] = useState([])
 
-    function openModal(id) {
-        setModalOpen(true)
-        setOpenedRoom(id)
+    useEffect(() => {
+        filterRooms(currentDate(), currentDate(), 'all')
+    }, [])
+
+    function currentDate() {
+        return new Date()
     }
 
-    function closeModal() {
-        setModalOpen(false)
-    }
-
-    function closeAlert() {
-        setdisplayAlert(false)
-    }
-
-    // Handles submission of reservation form
-    async function reserveRoom(details) {
+    async function reserveRoom(details: any) {
         setIsSubmitting(true)
 
         // const response = await fetch('http://localhost:5000/api/reserve/room', {
@@ -46,26 +37,25 @@ const RoomsPage = () => {
         )
 
         const status = await response.json()
-
-        closeModal()
-        setIsSubmitting(false)
-
-        if (status.status === 'fail') {
-            setisSubmitSuccess(false)
+        if (!status) {
+            setSuccess(false)
         } else {
-            setisSubmitSuccess(true)
+            setSuccess(true)
         }
-
-        setdisplayAlert(true)
+        setDisplayAlert(true)
+        setIsSubmitting(false)
     }
 
     // Filters out rooms
-    async function filterRooms(checkin, checkout, type) {
+    async function filterRooms(checkin: any, checkout: any, type: any) {
+        setDates([checkin, checkout])
+        const checkinDate = checkin.toLocaleDateString('en-CA')
+        const checkoutDate = checkout.toLocaleDateString('en-CA')
         setIsLoading(true)
 
         const response = await fetch(
             // `http://localhost:5000/api/rooms/filter?type=${type}&checkin=${checkin}&checkout=${checkout}`
-            `https://beach-reservation.onrender.com/api/rooms/filter?type=${type}&checkin=${checkin}&checkout=${checkout}`
+            `https://beach-reservation.onrender.com/api/rooms/filter?type=${type}&checkin=${checkinDate}&checkout=${checkoutDate}`
         )
         const data = await response.json()
 
@@ -77,31 +67,14 @@ const RoomsPage = () => {
         if (!data) return
 
         // Set new rooms to state
-        data.map((room) => {
+        data.map((room: any) => {
             setRooms((prev) => [...prev, room])
         })
     }
 
-    // Disabling scroll on main content when modal is open
-    useEffect(() => {
-        if (modalOpen || displayAlert) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = 'unset'
-        }
-    }, [modalOpen, displayAlert])
-
-    // Getting rooms at first load
-    useEffect(() => {
-        setIsLoading((curr) => (curr = !curr))
-        // fetch('http://localhost:5000/api/rooms')
-        fetch('https://beach-reservation.onrender.com/api/rooms')
-            .then((response) => response.json())
-            .then((data) => {
-                data.map((room) => setRooms((prev) => [...prev, room]))
-                setIsLoading((curr) => (curr = !curr))
-            })
-    }, [])
+    function handleNotify(state: boolean) {
+        setDisplayAlert(state)
+    }
 
     return (
         <>
@@ -110,26 +83,18 @@ const RoomsPage = () => {
             <div className="main">
                 <ContentHeader text={'Rooms'} />
                 <RoomFilter handleFilter={filterRooms} />
-
-                {modalOpen && (
-                    <Modal
-                        closeModal={closeModal}
-                        roomNumber={openedRoom}
-                        state={modalOpen}
-                        handleSubmit={reserveRoom}
-                    />
-                )}
-
-                <PostAlert
-                    closeAlert={closeAlert}
-                    status={isSubmitSuccess}
-                    isVisible={displayAlert}
-                />
-
+                {displayAlert ? (
+                    success ? (
+                        <NotifySuccess close={handleNotify} />
+                    ) : (
+                        <NotifyFail close={handleNotify} />
+                    )
+                ) : null}
                 <RoomList
                     roomsData={rooms}
-                    reserveRoom={openModal}
+                    handleReserveRoom={reserveRoom}
                     isLoading={isLoading}
+                    dates={dates}
                 />
                 <Outlet />
             </div>
@@ -138,3 +103,36 @@ const RoomsPage = () => {
 }
 
 export default RoomsPage
+
+import { Notification } from '@mantine/core'
+import { IconCheck, IconX } from '@tabler/icons'
+
+function NotifySuccess({ close }: any) {
+    return (
+        <Notification
+            title="Operation Success"
+            icon={<IconCheck size={18} />}
+            color="teal"
+            mt="sm"
+            mb="sm"
+            onClose={() => close(false)}
+        >
+            Operation is successful
+        </Notification>
+    )
+}
+
+function NotifyFail({ close }: any) {
+    return (
+        <Notification
+            title="Operation Fail"
+            icon={<IconX size={18} />}
+            color="red"
+            mt="sm"
+            mb="sm"
+            onClose={() => close(false)}
+        >
+            Unfortunately, operation failed
+        </Notification>
+    )
+}

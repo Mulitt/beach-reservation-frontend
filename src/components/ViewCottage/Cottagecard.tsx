@@ -5,7 +5,7 @@ import { useState } from 'react'
 import SubmissionLoader from '../SubmissionLoader/SubmissionLoader'
 import ReserveButton from './ReserveButton'
 
-function Cottagecard({ cottage }: any) {
+function Cottagecard({ cottage, dates }: any) {
     const [modalOpen, setModalOpen] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSubmitSuccess, setisSubmitSuccess] = useState(false)
@@ -64,7 +64,8 @@ function Cottagecard({ cottage }: any) {
                 <Roomcarousel />
                 <RoomInformation
                     cottage={cottage}
-                    submitReservation={submitReservation}
+                    handleReserveCottage={submitReservation}
+                    dates={dates}
                 />
             </Flex>
         </>
@@ -115,11 +116,11 @@ function Roomcarousel() {
     )
 }
 
-function RoomInformation({ cottage, submitReservation }: any) {
+function RoomInformation({ cottage, handleReserveCottage, dates }: any) {
     return (
         <Box
             style={{
-                maxWidth: '500px',
+                width: '600px',
                 paddingInline: '.5em',
                 position: 'relative',
             }}
@@ -134,7 +135,6 @@ function RoomInformation({ cottage, submitReservation }: any) {
                 justify="space-between"
                 align="center"
                 style={{
-                    border: '1px solid',
                     paddingInline: '.5em',
                     position: 'absolute',
                     bottom: '0',
@@ -149,7 +149,8 @@ function RoomInformation({ cottage, submitReservation }: any) {
                 <Box>
                     <ReserveButton
                         cottage={cottage}
-                        handleSubmit={submitReservation}
+                        handleReserveCottage={handleReserveCottage}
+                        dates={dates}
                     />
                 </Box>
             </Flex>

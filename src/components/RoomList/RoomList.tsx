@@ -5,19 +5,21 @@ import './RoomList.css'
 
 const RoomList = ({
     roomsData,
-    reserveRoom,
+    handleReserveRoom,
     isLoading,
     isAdmin,
-    editRoom,
+    // editRoom,
+    handleModification,
+    dates,
 }: any) => {
-    const [rooms, setRooms] = useState([])
+    const [rooms, setRooms] = useState<any[]>([])
     const [roomLoading, setRoomLoading] = useState(false)
 
     useEffect(() => {
         setRoomLoading(isLoading)
 
         setRooms([])
-        roomsData.map((room) => {
+        roomsData.map((room: any) => {
             setRooms((prev) => [...prev, room])
         })
     }, [roomsData, isLoading])
@@ -31,9 +33,11 @@ const RoomList = ({
                     <Room
                         key={room.roomNumber}
                         room={room}
-                        reserveRoom={reserveRoom}
-                        editRoom={editRoom}
+                        handleReserveRoom={handleReserveRoom}
+                        // editRoom={editRoom}
                         isAdmin={isAdmin}
+                        handleModification={handleModification}
+                        dates={dates}
                     />
                 ))
             ) : (

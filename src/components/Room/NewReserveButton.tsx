@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { Modal, Button, Group, Box } from '@mantine/core'
-import CottageForm from './CottageForm'
-import NewCottageReservationForm from './NewCottageReservationForm'
+import { Modal, Button, Group } from '@mantine/core'
+import NewRoomReservationForm from '../Reservations/NewRoomReservationForm'
 
-function ReserveButton({ cottage, handleReserveCottage, dates }: any) {
+function NewReserveButton({ room, dates, handleReserveRoom }: any) {
     const [opened, setOpened] = useState(false)
 
     function closeModal() {
@@ -15,14 +14,14 @@ function ReserveButton({ cottage, handleReserveCottage, dates }: any) {
             <Modal
                 opened={opened}
                 onClose={() => setOpened(false)}
-                title="Reserve Cottage"
+                title="Reserve Room"
                 size="lg"
             >
-                <NewCottageReservationForm
-                    cottage={cottage}
-                    handleReserveCottage={handleReserveCottage}
-                    closeModal={closeModal}
+                <NewRoomReservationForm
+                    room={room}
                     dates={dates}
+                    handleReserveRoom={handleReserveRoom}
+                    closeModal={closeModal}
                 />
             </Modal>
 
@@ -35,4 +34,4 @@ function ReserveButton({ cottage, handleReserveCottage, dates }: any) {
     )
 }
 
-export default ReserveButton
+export default NewReserveButton

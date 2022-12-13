@@ -2,7 +2,6 @@ import { useForm } from '@mantine/form'
 import {
     TextInput,
     PasswordInput,
-    Checkbox,
     Anchor,
     Paper,
     Title,
@@ -78,7 +77,14 @@ export function AuthenticationTitle({ setAuth }: TPropFunction) {
 
             {error ? <LoginAlert /> : null}
 
-            <Paper withBorder shadow="md" p={30} mt={10} radius="md">
+            <Paper
+                withBorder
+                shadow="md"
+                p="lg"
+                mt={10}
+                radius="md"
+                sx={{ width: '20em' }}
+            >
                 <form onSubmit={form.onSubmit(validateCredentials)}>
                     <TextInput
                         label="Email"
@@ -95,7 +101,7 @@ export function AuthenticationTitle({ setAuth }: TPropFunction) {
                         mt="md"
                     />
                     <Group position="apart" mt="lg">
-                        <Checkbox label="Remember me" sx={{ lineHeight: 1 }} />
+                        {/* <Checkbox label="Remember me" sx={{ lineHeight: 1 }} /> */}
                         <Anchor<'a'>
                             onClick={(event) => event.preventDefault()}
                             href="#"

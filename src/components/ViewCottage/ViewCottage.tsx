@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Cottagecard from './Cottagecard'
 // import './ViewRoom.css'
 
@@ -7,6 +7,9 @@ const ViewCottage = () => {
     const [cottage, setCottage] = useState({})
     const { id } = useParams()
     const navigate = useNavigate()
+    const location = useLocation()
+
+    console.log(location)
 
     useEffect(() => {
         console.log(id)
@@ -38,7 +41,7 @@ const ViewCottage = () => {
                     &larr;
                 </span>
             </nav>
-            <Cottagecard cottage={cottage} />
+            <Cottagecard cottage={cottage} dates={location.state} />
         </div>
     )
 }

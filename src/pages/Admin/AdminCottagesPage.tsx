@@ -25,7 +25,7 @@ const AdminCottagesPage = () => {
         setSubmissionLoading(true)
         // const response = await fetch('http://localhost:5000/api/cottage')
         const response = await fetch(
-            'https://beach-reservation.onrender.com/api/cottage'
+            'https://beach-reservation.onrender.com/api/cottage/all'
         )
         const result = await response.json()
         if (!result) return
@@ -60,7 +60,6 @@ const AdminCottagesPage = () => {
     }
 
     async function handleModification(modifications: any) {
-        console.log(modifications)
         setSubmissionLoading(true)
         const response = await fetch(
             // 'http://localhost:5000/api/admin/cottage/edit',

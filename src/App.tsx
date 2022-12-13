@@ -76,8 +76,8 @@ const App = () => {
                         <Route index element={<RoomsPage />} />
                         <Route path="rooms" element={<RoomsPage />} />
                         <Route path="rooms/:id" element={<ViewRoom />} />
-                        <Route path="cottage/:id" element={<ViewCottage />} />
                         <Route path="cottages" element={<CottagesPage />} />
+                        <Route path="cottage/:id" element={<ViewCottage />} />
                     </Route>
                     <Route path="/404" element={<NotFoundTitle />} />
                     <Route

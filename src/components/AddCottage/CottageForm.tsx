@@ -5,7 +5,6 @@ import {
     Space,
     Button,
     Group,
-    Box,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 
@@ -25,18 +24,19 @@ function CottageForm({ handleSubmit, closeModal }: any) {
                     ? 'Rate must be at least 0'
                     : null,
             description: (value) =>
-                value.length > 147 ? 'Description too long' : null,
+                value.length > 150 ? 'Description too long' : null,
         },
     })
 
     return (
         <form
             onSubmit={form.onSubmit(() => {
-                handleSubmit({
-                    name: form.getInputProps('name').value,
-                    rate: form.getInputProps('rate').value,
-                    desc: form.getInputProps('description').value,
-                })
+                console.log('submit')
+                // handleSubmit({
+                //     name: form.getInputProps('name').value,
+                //     rate: form.getInputProps('rate').value,
+                //     desc: form.getInputProps('description').value,
+                // })
                 closeModal()
             })}
         >

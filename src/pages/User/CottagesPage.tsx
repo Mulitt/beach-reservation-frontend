@@ -1,9 +1,11 @@
 import { Notification, Box } from '@mantine/core'
 import { IconCheck, IconX } from '@tabler/icons'
 import { useEffect, useState } from 'react'
+import UtilBar from '../../components/AdminUtilBar/UtilBar'
 import ContentHeader from '../../components/ContentHeader'
 import CottageFilter from '../../components/CottageFilter/CottageFilter'
 import CottageList from '../../components/CottageList/CottageList'
+import RoomFilter from '../../components/RoomFilter/RoomFilter'
 import SubmissionLoader from '../../components/SubmissionLoader/SubmissionLoader'
 
 type TCottage = {
@@ -19,18 +21,27 @@ const Cottages = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSubmitSuccess, setisSubmitSuccess] = useState(false)
     const [displayAlert, setdisplayAlert] = useState(false)
+    const [dates, setDates] = useState([])
 
     useEffect(() => {
-        fetchCottages()
+        fetchCottages(currentDate(), currentDate())
     }, [])
 
-    async function fetchCottages() {
+    function currentDate() {
+        return new Date()
+    }
+
+    async function fetchCottages(checkin: any, checkout: any) {
+        setDates([checkin, checkout])
+        const checkinDate = new Date(checkin)
+        const checkoutDate = new Date(checkout)
         // const response = await fetch('http://localhost:5000/api/cottage')
         const response = await fetch(
-            'https://beach-reservation.onrender.com/api/cottage'
+            `https://beach-reservation.onrender.com/api/cottage/filter?checkin=${checkinDate}&checkout=${checkoutDate}`
         )
         const cottages = await response.json()
         if (!cottages) return
+        setCottages([])
         cottages.map((cottage: TCottage) => {
             setCottages((prev) => [...prev, cottage])
         })
@@ -70,7 +81,7 @@ const Cottages = () => {
             {isSubmitting ? <SubmissionLoader /> : null}
             <div className="main">
                 <ContentHeader text={'Cottages'} />
-                {/* <CottageFilter /> */}
+                <CottageFilter handleFilter={fetchCottages} />
                 {displayAlert ? (
                     isSubmitSuccess ? (
                         <NotifySuccess />
@@ -82,7 +93,8 @@ const Cottages = () => {
                     <CottageList
                         cottages={cottages}
                         isAdmin={false}
-                        handleSubmit={submitReservation}
+                        handleReserveCottage={submitReservation}
+                        dates={dates}
                     />
                 </Box>
             </div>

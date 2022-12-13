@@ -5,7 +5,7 @@ import Modal from '../Modal/Modal'
 import SubmissionLoader from '../SubmissionLoader/SubmissionLoader'
 import ReserveButton from './ReserveButton'
 
-function Roomcard({ room }: any) {
+function Roomcard({ room, dates }: any) {
     const [modalOpen, setModalOpen] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSubmitSuccess, setisSubmitSuccess] = useState(false)
@@ -57,14 +57,18 @@ function Roomcard({ room }: any) {
                 )
             ) : null}
             <Flex
-                style={{ marginTop: '2em', border: '1px solid' }}
+                style={{
+                    marginTop: '2em',
+                    border: '1px solid',
+                }}
                 h={450}
                 gap="sm"
             >
                 <Roomcarousel />
                 <RoomInformation
                     room={room}
-                    submitReservation={submitReservation}
+                    handleReserveRoom={submitReservation}
+                    dates={dates}
                 />
             </Flex>
         </>
@@ -88,7 +92,10 @@ function Roomcarousel() {
             // slideGap="md"
         >
             <Carousel.Slide
-                style={{ backgroundColor: 'lightgray', padding: '.5em' }}
+                style={{
+                    backgroundColor: 'lightgray',
+                    padding: '.5em',
+                }}
             >
                 <Image
                     height={430}
@@ -115,11 +122,11 @@ function Roomcarousel() {
     )
 }
 
-function RoomInformation({ room, submitReservation }: any) {
+function RoomInformation({ room, handleReserveRoom, dates }: any) {
     return (
         <Box
             style={{
-                maxWidth: '500px',
+                width: '600px',
                 paddingInline: '.5em',
                 position: 'relative',
             }}
@@ -134,7 +141,6 @@ function RoomInformation({ room, submitReservation }: any) {
                 justify="space-between"
                 align="center"
                 style={{
-                    border: '1px solid',
                     paddingInline: '.5em',
                     position: 'absolute',
                     bottom: '0',
@@ -147,10 +153,15 @@ function RoomInformation({ room, submitReservation }: any) {
                     <h1>₱ {room.price}</h1>
                 </Box>
                 <Box>
-                    <ReserveButton
+                    <NewReserveButton
+                        room={room}
+                        handleReserveRoom={handleReserveRoom}
+                        dates={dates}
+                    />
+                    {/* <ReserveButton
                         room={room}
                         handleSubmit={submitReservation}
-                    />
+                    /> */}
                 </Box>
             </Flex>
         </Box>
@@ -159,6 +170,7 @@ function RoomInformation({ room, submitReservation }: any) {
 
 import { Notification } from '@mantine/core'
 import { IconCheck, IconX } from '@tabler/icons'
+import NewReserveButton from '../Room/NewReserveButton'
 
 function NotifySuccess({ close }: any) {
     return (

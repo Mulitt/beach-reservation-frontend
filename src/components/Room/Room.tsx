@@ -1,21 +1,16 @@
 import UserButton from './UserButton'
 import AdminButton from './AdminButton'
 import './Room.css'
+import EditRoom from './EditRoom'
+import NewEditRoom from '../EditRoom/NewEditRoom'
 
-interface TPropObject {
-    room: {
-        roomNumber: number
-        type: 'suite' | 'deluxe'
-        bed: number
-        description: String
-        price: number
-    }
-    reserveRoom: Function
-    editRoom: Function
-    isAdmin: boolean
-}
-
-const Room = ({ room, reserveRoom, editRoom, isAdmin }: TPropObject) => {
+const Room = ({
+    room,
+    handleReserveRoom,
+    isAdmin,
+    handleModification,
+    dates,
+}: any) => {
     return (
         <div className="room-card">
             <div className="room-img">
@@ -32,9 +27,18 @@ const Room = ({ room, reserveRoom, editRoom, isAdmin }: TPropObject) => {
                 <div className="room-rate">₱{room.price}</div>
                 <div className="room-cta">
                     {isAdmin ? (
-                        <AdminButton room={room} editRoom={editRoom} />
+                        // <AdminButton room={room} editRoom={editRoom} />
+                        <NewEditRoom
+                            room={room}
+                            handleModification={handleModification}
+                        />
                     ) : (
-                        <UserButton room={room} reserveRoom={reserveRoom} />
+                        // <EditRoom />
+                        <UserButton
+                            room={room}
+                            handleReserveRoom={handleReserveRoom}
+                            dates={dates}
+                        />
                     )}
                 </div>
             </div>

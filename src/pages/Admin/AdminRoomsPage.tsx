@@ -5,9 +5,10 @@ import EditRoom from '../../components/EditRoom/EditRoom'
 import SubmissionLoader from '../../components/SubmissionLoader/SubmissionLoader'
 import PostAlertAdmin from '../../components/PostAlert/PostAlertAdmin'
 import UtilBar from '../../components/AdminUtilBar/UtilBar'
+import NewAddRoom from '../../components/AddRoom/NewAddRoom'
 
 const AdminRoomsPage = () => {
-    const [rooms, setRooms] = useState([{}])
+    const [rooms, setRooms] = useState<any[]>([])
     const [filter, setFilter] = useState('all')
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [isAddOpen, setIsAddOpen] = useState(false)
@@ -15,15 +16,54 @@ const AdminRoomsPage = () => {
     const [submissionLoading, setSubmissionLoading] = useState(false)
     const [isPostSuccess, setIsPostSuccess] = useState(false)
     const [displayAlert, setDisplayAlert] = useState(false)
+    const [updateSuccess, setUpdateSuccess] = useState(false)
+
+    // useEffect(() => {
+    //     isEditOpen || isAddOpen
+    //         ? (document.body.style.overflow = 'hidden')
+    //         : (document.body.style.overflow = 'unset')
+    // }, [isEditOpen, isAddOpen])
+
+    useEffect(() => {
+        setIsLoading(true)
+        // fetch(`http://localhost:5000/api/rooms/all/${filter}`)
+        fetch(`https://beach-reservation.onrender.com/api/rooms/all/${filter}`)
+            .then((response) => response.json())
+            .then((data) => {
+                data.map((room: any) => setRooms((prev) => [...prev, room]))
+            })
+        setIsLoading(false)
+    }, [])
 
     // TODO: dd functionality to send request to server to modify room
-    async function modifyRoom(roomNumber: any) {
-        setIsEditOpen(true)
-        console.log(roomNumber)
-    }
-
-    async function submitEdit(roomNumber: number, details: any) {
-        console.log({ roomNumber, details })
+    async function modifyRoom(modifications: any) {
+        setSubmissionLoading(true)
+        const response = await fetch(
+            'https://beach-reservation.onrender.com/api/admin/room/edit',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(modifications),
+            }
+        )
+        const edittedRoom = response.json()
+        if (!edittedRoom) {
+            setUpdateSuccess(false)
+        } else {
+            setUpdateSuccess(true)
+        }
+        const updatedRooms = rooms.map((room) => {
+            if (room.roomNumber === edittedRoom.roomNumber) {
+                return edittedRoom
+            } else {
+                return room
+            }
+        })
+        setRooms(updatedRooms)
+        setSubmissionLoading(false)
+        handleNotify(true)
     }
 
     function handleAddRoomModal() {
@@ -67,13 +107,14 @@ const AdminRoomsPage = () => {
         handleAddRoomModal()
 
         if (status.status === 'fail') {
-            setIsPostSuccess(false)
+            // setIsPostSuccess(false)
+            setUpdateSuccess(false)
         } else {
-            setIsPostSuccess(true)
+            // setIsPostSuccess(true)
+            setUpdateSuccess(true)
         }
 
-        setDisplayAlert(true)
-
+        // setDisplayAlert(true)
         setRooms((prev) => [
             ...prev,
             {
@@ -85,25 +126,16 @@ const AdminRoomsPage = () => {
                 price: details.rate,
             },
         ])
+        handleNotify(true)
     }
 
-    useEffect(() => {
-        isEditOpen || isAddOpen
-            ? (document.body.style.overflow = 'hidden')
-            : (document.body.style.overflow = 'unset')
-    }, [isEditOpen, isAddOpen])
+    function handleNotify(state: boolean) {
+        setDisplayAlert(state)
+    }
 
-    useEffect(() => {
-        setIsLoading(true)
-        // fetch(`http://localhost:5000/api/rooms/all/${filter}`)
-        fetch(`https://beach-reservation.onrender.com/api/rooms/all/${filter}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setRooms([])
-                data.map((room: any) => setRooms((prev) => [...prev, room]))
-            })
-        setIsLoading(false)
-    }, [filter])
+    function testPost(room: any) {
+        console.log(room)
+    }
 
     return (
         <>
@@ -113,26 +145,32 @@ const AdminRoomsPage = () => {
                 <UtilBar
                     currentFilter={filter}
                     setFilter={filterRooms}
-                    isAddOpen={isAddOpen}
-                    handleAddRoomModal={handleAddRoomModal}
-                    submitRoom={submitRoom}
-                    closeAddRoom={closeModal}
+                    handleSubmit={submitRoom}
+                    // handleSubmit={testPost}
                 />
-                <EditRoom
+                {displayAlert ? (
+                    updateSuccess ? (
+                        <NotifySuccess close={handleNotify} />
+                    ) : (
+                        <NotifyFail close={handleNotify} />
+                    )
+                ) : null}
+                {/* <EditRoom
                     isVisible={isEditOpen}
                     closeEdit={closeModal}
                     submitEdit={submitEdit}
-                />
-                <PostAlertAdmin
+                /> */}
+                {/* <PostAlertAdmin
                     closeAlert={closeAlert}
                     status={isPostSuccess}
                     isVisible={displayAlert}
-                />
+                /> */}
                 <RoomList
                     isLoading={isLoading}
                     roomsData={rooms}
                     isAdmin={true}
-                    editRoom={modifyRoom}
+                    // editRoom={modifyRoom}
+                    handleModification={modifyRoom}
                     reserveRoom={undefined}
                 />
             </div>
@@ -141,3 +179,36 @@ const AdminRoomsPage = () => {
 }
 
 export default AdminRoomsPage
+
+import { Notification } from '@mantine/core'
+import { IconCheck, IconX } from '@tabler/icons'
+
+function NotifySuccess({ close }: any) {
+    return (
+        <Notification
+            title="Operation Success"
+            icon={<IconCheck size={18} />}
+            color="teal"
+            mt="sm"
+            mb="sm"
+            onClose={() => close(false)}
+        >
+            Operation is successful
+        </Notification>
+    )
+}
+
+function NotifyFail({ close }: any) {
+    return (
+        <Notification
+            title="Operation Fail"
+            icon={<IconX size={18} />}
+            color="red"
+            mt="sm"
+            mb="sm"
+            onClose={() => close(false)}
+        >
+            Unfortunately, operation failed
+        </Notification>
+    )
+}

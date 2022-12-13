@@ -11,7 +11,8 @@ function CottageList({
     cottages,
     handleModification,
     isAdmin,
-    handleSubmit,
+    handleReserveCottage,
+    dates,
 }: any) {
     return (
         <>
@@ -21,8 +22,9 @@ function CottageList({
                         key={cottage.cottageId}
                         cottage={cottage}
                         isAdmin={isAdmin}
+                        dates={dates}
                         handleModification={handleModification}
-                        handleSubmit={handleSubmit}
+                        handleReserveCottage={handleReserveCottage}
                     />
                 ))
             ) : (

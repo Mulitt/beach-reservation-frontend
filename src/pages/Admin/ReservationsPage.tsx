@@ -3,8 +3,9 @@ import { MdOutlineBedroomChild } from 'react-icons/md'
 import { FaUmbrellaBeach } from 'react-icons/fa'
 import { useEffect, useState } from 'react'
 import ContentHeader from '../../components/ContentHeader'
-import Reservations from '../../components/Reservations/Reservations'
-import Cottages from '../../components/Reservations/Cottages'
+// import Reservations from '../../components/Reservations/Reservations'
+import RoomReservations from '../../components/Reservations/RoomReservations'
+import CottagesReservations from '../../components/Reservations/CottagesReservations'
 
 type TReservation = {
     bookingId: Number
@@ -46,7 +47,7 @@ const ReservationsPage = () => {
     return (
         <div className="main">
             <ContentHeader text={'Reservations'} />
-            <Tabs defaultValue="gallery" mt="md">
+            <Tabs variant="outline" defaultValue="gallery" mt="md">
                 <Tabs.List>
                     <Tabs.Tab
                         value="gallery"
@@ -63,10 +64,13 @@ const ReservationsPage = () => {
                 </Tabs.List>
 
                 <Tabs.Panel value="gallery" pt="xs">
-                    <Reservations reservations={roomReservations} />
+                    {/* <Reservations reservations={roomReservations} /> */}
+                    <RoomReservations roomReservations={roomReservations} />
                 </Tabs.Panel>
                 <Tabs.Panel value="messages" pt="xs">
-                    <Cottages reservations={cottageReservations} />
+                    <CottagesReservations
+                        cottageReservations={cottageReservations}
+                    />
                 </Tabs.Panel>
             </Tabs>
         </div>

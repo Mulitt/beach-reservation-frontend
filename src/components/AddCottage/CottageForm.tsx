@@ -31,12 +31,11 @@ function CottageForm({ handleSubmit, closeModal }: any) {
     return (
         <form
             onSubmit={form.onSubmit(() => {
-                console.log('submit')
-                // handleSubmit({
-                //     name: form.getInputProps('name').value,
-                //     rate: form.getInputProps('rate').value,
-                //     desc: form.getInputProps('description').value,
-                // })
+                handleSubmit({
+                    name: form.getInputProps('name').value,
+                    rate: form.getInputProps('rate').value,
+                    desc: form.getInputProps('description').value,
+                })
                 closeModal()
             })}
         >
